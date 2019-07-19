@@ -72,8 +72,7 @@ namespace NICE_Helper
                                 using (GZipStream compressionStream = new GZipStream(compressedFileStream, CompressionMode.Compress))
                                 {
                                     originalFileStream.CopyTo(compressionStream);
-                                }
-                                
+                                }                                
                             }
                         }
                     }
