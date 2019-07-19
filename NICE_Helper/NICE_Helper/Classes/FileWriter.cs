@@ -27,8 +27,7 @@ namespace NICE_Helper
 
         public void Compress(DirectoryInfo SourceFolder, string TargetFolder, bool InludeConfigs)
         {
-            try
-            {
+            try {
                 string newCompressedFile;
 
                 foreach (var fileToCompress in SourceFolder.GetFiles().Where(s => s.Name.ToLower().Contains(".log")))
@@ -56,7 +55,6 @@ namespace NICE_Helper
                 }
 
                 if (InludeConfigs)
-                {
                     foreach (var fileToCompress in SourceFolder.GetFiles().Where(s => s.Name.ToLower().Contains(".exe.config")))
                     {
                         using (FileStream originalFileStream = fileToCompress.OpenRead())
@@ -79,15 +77,13 @@ namespace NICE_Helper
                             }
                         }
                     }
-                }
             }
             catch (Exception) { throw; }
         }
 
         public int Uncompress(DirectoryInfo SourceFolder)
         {
-            try
-            {
+            try {
                 // Unzip using 7-zip
                 // Windows version:
                 //string zPath = @"C:\Program Files\7-Zip\7zG.exe";
