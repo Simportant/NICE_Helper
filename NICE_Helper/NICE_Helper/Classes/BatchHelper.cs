@@ -24,8 +24,7 @@ namespace NICE_Helper
         {
             
             int result = Helper.RESULT_GOOD;
-            try
-            {
+            try {
                 CreateBatch(BatchCommand);
 
                 using (System.Diagnostics.Process myProcess = new System.Diagnostics.Process())
@@ -55,8 +54,7 @@ namespace NICE_Helper
         
         private static void CreateBatch(string BatchCommand)
         {
-            try
-            {
+            try {
                 using (FileWriter btch = new FileWriter(_batchFile))
                 {
                     btch.WriteLine(BatchCommand);

@@ -35,8 +35,7 @@ namespace NICE_Helper
 
         public static void DeleteFile(string outFile)
         {
-            try
-            {
+            try {
                 if (System.IO.File.Exists(outFile))
                     System.IO.File.Delete(outFile);
             }
@@ -50,8 +49,7 @@ namespace NICE_Helper
         {
             if (!System.IO.Directory.Exists(NewFolderName))
             {
-                try
-                {
+                try {
                     System.IO.Directory.CreateDirectory(NewFolderName);
                 }         
                 catch (System.Exception) 

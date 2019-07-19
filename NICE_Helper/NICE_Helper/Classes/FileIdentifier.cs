@@ -20,8 +20,7 @@ namespace NICE_Helper
         {
             _includeConfigs = IncludeConfigs;
             FilesFound = new BindingList<FileDetail>();
-            try
-            {
+            try {
                 string cmd = CreateBatchCommand();
 
                 if (RunBatch(cmd) == Helper.RESULT_GOOD)
@@ -30,10 +29,7 @@ namespace NICE_Helper
                 Helper.DeleteFile(_batchFile);
                 Helper.DeleteFile(_outFile);
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public FileIdentifier(string path)
@@ -44,8 +40,7 @@ namespace NICE_Helper
 
         private void ListZippedProjectFiles(string path)
         {
-            try
-            {
+            try {
                 // Only get files that begin with the letter "z".
                 string[] found = Directory.GetFiles(path, "*.z*");
                 foreach (string fl in found)
@@ -73,7 +68,6 @@ namespace NICE_Helper
                 str.Append(@"for /d %%i in (C:\Users\*) do dir %%i\AppData\Roaming\Nice_Systems\Real-Time\*.exe.config* /s /b /a:-D");
                 str.Append(@" >> ");
                 str.Append(@"""");
-                //str.Append(@"");
                 str.Append(_outFile);
                 str.Append(@"""");
                 str.AppendLine();
