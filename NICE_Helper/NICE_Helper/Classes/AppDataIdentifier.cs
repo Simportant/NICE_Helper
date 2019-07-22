@@ -43,7 +43,6 @@ namespace NICE_Helper
             FileDetail ap = new FileDetail();
             ap = FoldersFound.FirstOrDefault(x => x.User == userName);
             ap.Selected = !ap.Selected;
-
         }
 
         public void RemoveSelectedItems()

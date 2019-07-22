@@ -95,32 +95,32 @@ namespace NICE_Helper
                 if (!File.Exists(zPath))
                     return 0;
 
-                string newFileName = string.Empty;
-                string unzippedFileName = string.Empty;
+                string newPathFileName = string.Empty;
+                string PathFileLessExtension = string.Empty;
 
                 int ProjectCount = 0;
 
                 Helper.MakeFolder(UnzippedFolder);
                 Helper.MakeFolder(ZippedFolder);
 
-                foreach (var zippedFile in SourceFolder.GetFiles().Where(s => s.Name.ToLower().Contains(".zproj")))
+                foreach (FileInfo zippedFile in SourceFolder.GetFiles().Where(s => s.Name.ToLower().Contains(".zproj")))
                 {
-                    unzippedFileName = string.Concat(UnzippedFolder, zippedFile.Name.Replace(".zproj", ""));
-                    newFileName = string.Concat(UnzippedFolder, zippedFile.Name.Replace(".zproj", ".dproj"));
+                    PathFileLessExtension = string.Concat(UnzippedFolder, zippedFile.Name.Replace(".zproj", ""));
+                    newPathFileName = string.Concat(UnzippedFolder, zippedFile.Name.Replace(".zproj", ".dproj"));
 
-                    Unzip(UnzippedFolder, zPath, newFileName, unzippedFileName, zippedFile);
+                    Unzip(UnzippedFolder, zPath, newPathFileName, PathFileLessExtension, zippedFile);
 
                     File.Move(zippedFile.FullName, string.Concat(ZippedFolder, zippedFile.Name));
 
                     ProjectCount += 1;
                 }
 
-                foreach (var zippedFile in SourceFolder.GetFiles().Where(s => s.Name.ToLower().Contains(".zesx")))
+                foreach (FileInfo zippedFile in SourceFolder.GetFiles().Where(s => s.Name.ToLower().Contains(".zesx")))
                 {
-                    unzippedFileName = string.Concat(UnzippedFolder, zippedFile.Name.Replace(".zesx", ""));
-                    newFileName = string.Concat(UnzippedFolder, zippedFile.Name.Replace(".zesx", ".resx"));
+                    PathFileLessExtension = string.Concat(UnzippedFolder, zippedFile.Name.Replace(".zesx", ""));
+                    newPathFileName = string.Concat(UnzippedFolder, zippedFile.Name.Replace(".zesx", ".resx"));
 
-                    Unzip(UnzippedFolder, zPath, newFileName, unzippedFileName, zippedFile);
+                    Unzip(UnzippedFolder, zPath, newPathFileName, PathFileLessExtension, zippedFile);
 
                     File.Move(zippedFile.FullName, string.Concat(ZippedFolder, zippedFile.Name));
                 }

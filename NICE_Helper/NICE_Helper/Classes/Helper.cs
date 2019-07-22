@@ -35,29 +35,21 @@ namespace NICE_Helper
 
         public static void DeleteFile(string outFile)
         {
-            try
-            {
+            try  {
                 if (System.IO.File.Exists(outFile))
                     System.IO.File.Delete(outFile);
             }
-            catch (System.Exception)
-            {
-                throw;
-            }            
+            catch (System.Exception) { throw; }            
         }
         
         public static void MakeFolder(string NewFolderName)
         {
             if (!System.IO.Directory.Exists(NewFolderName))
             {
-                try
-                {
+                try {
                     System.IO.Directory.CreateDirectory(NewFolderName);
                 }         
-                catch (System.Exception) 
-                {
-                    throw;
-                }
+                catch (System.Exception)  { throw; }
             }
         }
 

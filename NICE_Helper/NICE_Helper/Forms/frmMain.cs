@@ -17,8 +17,7 @@ namespace NICE_Helper
         {
             InitializeComponent();
 
-            try
-            {
+            try {
                 this.Text = string.Concat(this.Text, " (Version ", System.Reflection.Assembly.GetEntryAssembly().GetName().Version, ")");
 
                 // In run mode set info labels blank (rather than "See Code" which is visible in the Designer).
@@ -44,8 +43,7 @@ namespace NICE_Helper
 
         private void cmdLogFilesExtract_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 string folder = string.Empty;
 
                 using (FolderBrowserDialog dlg = new FolderBrowserDialog())
@@ -74,10 +72,8 @@ namespace NICE_Helper
         }
         private void cmdLogFilesFind_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 SetScreen();
-
                 IdentifyLogFiles();
 
                 if ((_foundFiles != null) && (_foundFiles.CountUsers > 0))
@@ -101,8 +97,8 @@ namespace NICE_Helper
         
         private void cmdProjFilesFind_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
+
                 string folder = string.Empty;
 
                 using (FolderBrowserDialog dlg = new FolderBrowserDialog())
@@ -150,8 +146,8 @@ namespace NICE_Helper
         }
         private void cmdProjFilesUnzip_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
+
                 // Use the FileWriter Class to uncompress compress each file in the folder.
                 using (FileWriter fl = new FileWriter())
                 {
@@ -196,8 +192,8 @@ namespace NICE_Helper
         }
         private void cmdAppDataFilesFind_Click(object sender, EventArgs e)
         {
-            try
-            {
+            try {
+
                 SetScreen();
                 _foundFolders = new AppDataIdentifier();
                 
@@ -234,8 +230,7 @@ namespace NICE_Helper
             // Only allow this on the Logs Tab.
             if (this.MyTabControl.SelectedTab.Text != "RT Logs") { return; }
 
-            try
-            {
+            try {
                 string FileAndPath;
                 FileAndPath = this.dgvHistory.Rows[e.RowIndex].Cells[0].Value.ToString() + @"\" + this.dgvHistory.Rows[e.RowIndex].Cells[2].Value.ToString();
                 var p = new Process();
@@ -395,8 +390,7 @@ namespace NICE_Helper
         }
         private void RunExtract(string folder)
         {
-            try
-            {
+            try {
                 // Get each unique Path.
                 SortedList<string, string> UniquePaths = new SortedList<string, string>();
                 foreach (FileDetail x in _foundFiles.FilesFound)
@@ -418,7 +412,6 @@ namespace NICE_Helper
                         DirectoryInfo di = new DirectoryInfo(logPath);
 
                         fl.Compress(di, filePath, this.chkIncludeConfigs.Checked);
-
                     }
                 }
             }
@@ -426,8 +419,7 @@ namespace NICE_Helper
         }        
         private void IdentifyLogFiles()
         {
-            try
-            {
+            try {
 
                 int step = 0;
                 DateTime start = DateTime.Now.AddMinutes(2);
@@ -492,15 +484,11 @@ namespace NICE_Helper
                 e.Cancel = true;
             else
             {
-                try
-                {
+                try {
                     // This is the main bit......
                     _foundFiles = new FileIdentifier(this.chkIncludeConfigs.Checked);
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
+                catch (Exception) { throw; }
                 finally
                 {
                     // Can bail out once the main bit above is complete.
@@ -520,22 +508,15 @@ namespace NICE_Helper
             // This event handler deals with the results of the background operation.
             // First, handle the case where an exception was thrown.
             if (e.Error != null)
-            {
                 this.ssTextBox.Text = string.Concat("PC Name: ", Environment.MachineName, " - ", e.Error.Message);
-            }
             else if (e.Cancelled)
-            {
                 // Next, handle the case where the user canceled the operation.
                 // Note that due to a race condition in the DoWork event handler, the Cancelled
                 // flag may not have been set, even though CancelAsync was called.
                 this.ssTextBox.Text = string.Concat("PC Name: ", Environment.MachineName, " - Search Cancelled");
-            }
             else
-            {
                 // Finally, handle the case where the operation succeeded.
-                this.ssTextBox.Text = string.Concat("PC Name: ", Environment.MachineName, " - Search Complete");
-            }
-            
+                this.ssTextBox.Text = string.Concat("PC Name: ", Environment.MachineName, " - Search Complete");            
         }
 
 
