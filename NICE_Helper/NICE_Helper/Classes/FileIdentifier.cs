@@ -71,7 +71,6 @@ namespace NICE_Helper
                 str.Append(@"for /d %%i in (C:\Users\*) do dir %%i\AppData\Roaming\Nice_Systems\Real-Time\*.exe.config* /s /b /a:-D");
                 str.Append(@" >> ");
                 str.Append(@"""");
-                //str.Append(@"");
                 str.Append(_outFile);
                 str.Append(@"""");
                 str.AppendLine();

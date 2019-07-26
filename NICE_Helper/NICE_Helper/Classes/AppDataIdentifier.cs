@@ -16,8 +16,7 @@ namespace NICE_Helper
         public AppDataIdentifier()
         {
             FoldersFound = new BindingList<FileDetail>();
-            try
-            {
+            try {
                 StringBuilder str = new StringBuilder();
                 str.Append(@"for /d %%i in (C:\Users\*) do dir %%i\AppData\Roaming\Nice_Systems\Real-Time\RTClient.exe.config* /s /b /a:-D");
                 str.Append(@" >> ");
