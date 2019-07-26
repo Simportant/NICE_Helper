@@ -262,9 +262,9 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(24, 160);
+            this.label3.Location = new System.Drawing.Point(24, 103);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(287, 54);
+            this.label3.Size = new System.Drawing.Size(244, 71);
             this.label3.TabIndex = 6;
             this.label3.Text = "Returns a list of Compressed RT Designer Project files.  Any found files can then" +
     " be un-zipped.";
@@ -272,7 +272,7 @@
             // lblZippedFolder
             // 
             this.lblZippedFolder.AutoSize = true;
-            this.lblZippedFolder.Location = new System.Drawing.Point(35, 19);
+            this.lblZippedFolder.Location = new System.Drawing.Point(337, 16);
             this.lblZippedFolder.Name = "lblZippedFolder";
             this.lblZippedFolder.Size = new System.Drawing.Size(66, 17);
             this.lblZippedFolder.TabIndex = 5;
@@ -282,7 +282,7 @@
             // lblZippedFound
             // 
             this.lblZippedFound.AutoSize = true;
-            this.lblZippedFound.Location = new System.Drawing.Point(35, 45);
+            this.lblZippedFound.Location = new System.Drawing.Point(337, 42);
             this.lblZippedFound.Name = "lblZippedFound";
             this.lblZippedFound.Size = new System.Drawing.Size(66, 17);
             this.lblZippedFound.TabIndex = 4;
@@ -302,7 +302,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(35, 77);
+            this.label2.Location = new System.Drawing.Point(24, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(216, 17);
             this.label2.TabIndex = 2;
@@ -311,7 +311,7 @@
             // cmdProjFilesUnzip
             // 
             this.cmdProjFilesUnzip.Enabled = false;
-            this.cmdProjFilesUnzip.Location = new System.Drawing.Point(496, 108);
+            this.cmdProjFilesUnzip.Location = new System.Drawing.Point(608, 77);
             this.cmdProjFilesUnzip.Name = "cmdProjFilesUnzip";
             this.cmdProjFilesUnzip.Size = new System.Drawing.Size(95, 30);
             this.cmdProjFilesUnzip.TabIndex = 1;
@@ -321,7 +321,7 @@
             // 
             // cmdProjFilesFind
             // 
-            this.cmdProjFilesFind.Location = new System.Drawing.Point(156, 108);
+            this.cmdProjFilesFind.Location = new System.Drawing.Point(145, 42);
             this.cmdProjFilesFind.Name = "cmdProjFilesFind";
             this.cmdProjFilesFind.Size = new System.Drawing.Size(95, 30);
             this.cmdProjFilesFind.TabIndex = 0;
@@ -429,7 +429,7 @@
             this.dgvAppsDataFolders.Visible = false;
             this.dgvAppsDataFolders.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAppsDataFolders_CellClick);
             // 
-            // frmRTLogs
+            // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -442,7 +442,7 @@
             this.Controls.Add(this.cmdClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "frmRTLogs";
+            this.Name = "frmMain";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SVL RT Logs";

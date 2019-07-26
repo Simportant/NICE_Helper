@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.ComponentModel;
+
+
 namespace NICE_Helper
 {
     public static class Extension
@@ -61,5 +65,14 @@ namespace NICE_Helper
             var lastCol = dataGridView.Columns[idx];
             lastCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
         }
+
+        public static void SortList(this BindingList<FileDetail> lst)
+        {
+            // To Sort(Name) we first OrderBy into a new List<T>, then use this List to create a new BindingList<T>
+            // because the Enumberable.OrderBy method returns an IOrderedEnumberable<T>, so need to create a new BindingList<T> from that return value.
+            System.Collections.Generic.List<FileDetail> sortedList = lst.OrderBy(x => x.User).ToList();
+            lst = new BindingList<FileDetail>(sortedList);
+        }
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace NICE_Helper
 {
-    class FileDetail
+    public class FileDetail
     {
         long _Bytes;
         
