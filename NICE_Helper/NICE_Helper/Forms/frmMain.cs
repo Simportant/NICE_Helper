@@ -17,10 +17,10 @@ namespace NICE_Helper
         public frmMain()
         {
             InitializeComponent();
-
-            log.Debug("Application Starting.....");
-
+            
             try {
+                log.Debug("Application Starting.....");
+
                 this.Text = string.Concat(this.Text, " (Version ", System.Reflection.Assembly.GetEntryAssembly().GetName().Version, ")");
                 // In run mode set info labels blank (rather than "See Code" which is visible in the Designer).
                 this.lblUsers.Text = "";
@@ -182,17 +182,25 @@ namespace NICE_Helper
 
         private void cmdAppDataDelete_Click(object sender, EventArgs e)
         {
-            if (_foundFolders.ReadyForDeletion)
-            {
-                if (MessageBox.Show("Are you sure, this action cannot be undone?", Helper.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            try {
+
+                if (_foundFolders.ReadyForDeletion)
                 {
-                    _foundFolders.RemoveSelectedItems();
-                    MessageBox.Show("Folders deleted. Please refresh to confirm.", Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    SetScreen();
+                    if (MessageBox.Show("Are you sure, this action cannot be undone?", Helper.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    {
+                        _foundFolders.RemoveSelectedItems();
+                        MessageBox.Show("Folders deleted. Please refresh to confirm.", Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        SetScreen();
+                    }
                 }
+                else
+                    MessageBox.Show("Please select items for deletion!", Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else
-                MessageBox.Show("Please select items for deletion!", Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            catch (Exception ex)
+            {
+                log.Warn(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
         private void cmdAppDataFilesFind_Click(object sender, EventArgs e)
         {
@@ -353,6 +361,7 @@ namespace NICE_Helper
 
             this.cmdLogFilesExtract.Select();
         }
+
         private void FillAppUserGrid()
         {
             // Build a sub list of User & Path
@@ -392,6 +401,7 @@ namespace NICE_Helper
             this.dgvAppsDataFolders.StretchThisColumn(2);
 
         }
+
         private void RunExtract(string folder)
         {
             try {
@@ -418,12 +428,10 @@ namespace NICE_Helper
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }        
+            catch (Exception) { throw; }
+        }
+
+
         private void IdentifyLogFiles()
         {
             try {
@@ -462,12 +470,7 @@ namespace NICE_Helper
                 this.ProgressBar.Value = 0;
 
             }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
+            catch (Exception) { throw; }
         }
         
         private void InitializeBackgroundWorker()
@@ -485,8 +488,8 @@ namespace NICE_Helper
                 backgroundWorker1.RunWorkerAsync();
             }
             catch (Exception) { throw; }
-
         }
+
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             // This event handler is where the actual, potentially time-consuming work is done.    
@@ -515,7 +518,8 @@ namespace NICE_Helper
                         }
                 }              
             }
-        }       
+        }
+
         private void backgroundWorker1_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e)
         {
             // This event handler deals with the results of the background operation.
