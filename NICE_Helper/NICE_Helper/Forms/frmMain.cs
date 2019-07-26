@@ -5,11 +5,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
-
 namespace NICE_Helper
 {
     public partial class frmMain : Form
     {
+
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private FileIdentifier _foundFiles;
         private AppDataIdentifier _foundFolders;
 
@@ -17,9 +18,10 @@ namespace NICE_Helper
         {
             InitializeComponent();
 
+            log.Debug("Application Starting.....");
+
             try {
                 this.Text = string.Concat(this.Text, " (Version ", System.Reflection.Assembly.GetEntryAssembly().GetName().Version, ")");
-
                 // In run mode set info labels blank (rather than "See Code" which is visible in the Designer).
                 this.lblUsers.Text = "";
                 this.lblLogs.Text = "";
@@ -27,12 +29,12 @@ namespace NICE_Helper
                 this.lblZippedFolder.Text = "";
                 this.lblZippedFound.Text = "";
                 this.lblZippedMessage.Text = "";
-
                 SetScreen();
             }
             catch (Exception ex)
             {
-                ErrorLogger.Log(ex.Message, System.Reflection.MethodBase.GetCurrentMethod().Name, Helper.LogLevel.ERROR, true);
+                log.Error(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -62,11 +64,11 @@ namespace NICE_Helper
                     MessageBox.Show("Log Extracted to: " + folder + @"\", Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.ssTextBox.Text = string.Concat("PC Name: ", Environment.MachineName, " - Extract Complete");
                 }
-
             }
             catch (Exception ex)
             {
-                ErrorLogger.Log(ex.Message, System.Reflection.MethodBase.GetCurrentMethod().Name, Helper.LogLevel.WARN, true);
+                log.Warn(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 this.ssTextBox.Text = string.Concat("PC Name: ", Environment.MachineName, " - Extract Failed");
             }
         }
@@ -74,7 +76,6 @@ namespace NICE_Helper
         {
             try {
                 SetScreen();
-
                 IdentifyLogFiles();
 
                 if ((_foundFiles != null) && (_foundFiles.CountUsers > 0))
@@ -91,7 +92,8 @@ namespace NICE_Helper
             }
             catch (Exception ex)
             {
-                ErrorLogger.Log(ex.Message, System.Reflection.MethodBase.GetCurrentMethod().Name, Helper.LogLevel.ERROR, true);
+                log.Error(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.ssTextBox.Text = string.Concat("PC Name: ", Environment.MachineName, " - Find Files Failed.");
             }
         }        
@@ -99,6 +101,7 @@ namespace NICE_Helper
         private void cmdProjFilesFind_Click(object sender, EventArgs e)
         {
             try {
+
                 string folder = string.Empty;
 
                 using (FolderBrowserDialog dlg = new FolderBrowserDialog())
@@ -124,7 +127,6 @@ namespace NICE_Helper
                     {
                         SetScreen();
                         FillDataGrid();
-
                         this.lblZippedFolder.Text = folder;
                         this.lblZippedFolder.Visible = true;
                         this.lblZippedFound.Text = string.Concat("RT Designer Zipped Projects files: ", _foundFiles.CountFiles.ToString());
@@ -134,19 +136,19 @@ namespace NICE_Helper
                     }
                     else
                         MessageBox.Show("No files found");
-
                 }
-
             }
             catch (Exception ex)
             {
-                ErrorLogger.Log(ex.Message, System.Reflection.MethodBase.GetCurrentMethod().Name, Helper.LogLevel.WARN, true);
+                log.Error(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
         private void cmdProjFilesUnzip_Click(object sender, EventArgs e)
         {
             try {
+
                 // Use the FileWriter Class to uncompress compress each file in the folder.
                 using (FileWriter fl = new FileWriter())
                 {
@@ -169,10 +171,13 @@ namespace NICE_Helper
                             this.cmdProjFilesUnzip.Enabled = false;
                             break;
                     }
-
                 }
             }
-            catch (Exception) { throw; }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void cmdAppDataDelete_Click(object sender, EventArgs e)
@@ -192,6 +197,7 @@ namespace NICE_Helper
         private void cmdAppDataFilesFind_Click(object sender, EventArgs e)
         {
             try {
+
                 SetScreen();
                 _foundFolders = new AppDataIdentifier();
                 
@@ -212,7 +218,8 @@ namespace NICE_Helper
             }
             catch (Exception ex)
             {
-                ErrorLogger.Log(ex.Message, System.Reflection.MethodBase.GetCurrentMethod().Name, Helper.LogLevel.ERROR, true);
+                log.Error(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -237,7 +244,8 @@ namespace NICE_Helper
             }
             catch (Exception ex)
             {
-                ErrorLogger.Log(ex.Message, System.Reflection.MethodBase.GetCurrentMethod().Name, Helper.LogLevel.WARN, true);
+                log.Warn(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         private void dgvAppsDataFolders_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -262,10 +270,8 @@ namespace NICE_Helper
 
             this.dgvHistory.DataSource = null;
             this.dgvHistory.Rows.Clear();
-
             this.dgvAppsDataFolders.DataSource = null;
-            this.dgvAppsDataFolders.Rows.Clear();
-            
+            this.dgvAppsDataFolders.Rows.Clear();            
             this.ssTextBox.Text = string.Concat("PC Name: ", Environment.MachineName);
 
             if (this.MyTabControl.SelectedTab.Text == "AppData Folders")
@@ -408,13 +414,15 @@ namespace NICE_Helper
 
                         // and zip each file into the new folder.
                         DirectoryInfo di = new DirectoryInfo(logPath);
-
                         fl.Compress(di, filePath, this.chkIncludeConfigs.Checked);
-
                     }
                 }
             }
-            catch (Exception) { throw; }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }        
         private void IdentifyLogFiles()
         {
@@ -454,23 +462,29 @@ namespace NICE_Helper
                 this.ProgressBar.Value = 0;
 
             }
-            catch (Exception) { throw; }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                MessageBox.Show(ex.Message, Helper.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
         
         private void InitializeBackgroundWorker()
         {
+            try {
+                backgroundWorker1 = new BackgroundWorker();
 
-            backgroundWorker1 = new BackgroundWorker();
+                backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
+                backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
 
-            backgroundWorker1.DoWork += new DoWorkEventHandler(backgroundWorker1_DoWork);
-            backgroundWorker1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
+                backgroundWorker1.WorkerSupportsCancellation = true;
+                backgroundWorker1.WorkerReportsProgress = true; // not used in this Solution as we shell out a batch file so dont get any feedback from it.
 
-            backgroundWorker1.WorkerSupportsCancellation = true;
-            backgroundWorker1.WorkerReportsProgress = true; // not used in this Solution as we shell out a batch file so dont get any feedback from it.
-
-            // Start the asynchronous operation.
-            backgroundWorker1.RunWorkerAsync();
+                // Start the asynchronous operation.
+                backgroundWorker1.RunWorkerAsync();
+            }
+            catch (Exception) { throw; }
 
         }
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)

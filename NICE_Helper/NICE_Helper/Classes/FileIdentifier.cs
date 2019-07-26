@@ -28,6 +28,9 @@ namespace NICE_Helper
 
                 Helper.DeleteFile(_batchFile);
                 Helper.DeleteFile(_outFile);
+
+                if (CountUsers > 1)
+                    FilesFound.SortList();
             }
             catch (Exception) { throw; }
         }
@@ -35,7 +38,7 @@ namespace NICE_Helper
         public FileIdentifier(string path)
         {
             FilesFound = new BindingList<FileDetail>();
-            ListZippedProjectFiles(path);
+            ListZippedProjectFiles(path);            
         }
 
         private void ListZippedProjectFiles(string path)
@@ -87,60 +90,47 @@ namespace NICE_Helper
         {
             using (StreamReader sw = new StreamReader(_outFile))
             {
-                string line;
-                string user;
-                string nm;
-                DateTime dtCreationTime;
+                string line;               
                 ArrayList names = new ArrayList();
-
+                string name = string.Empty;
                 while ((line = sw.ReadLine()) != null)
                 {
-                    // only if like a log file.
+                    name = string.Empty;
+
                     if (line.ToLower().Contains(".log"))
                     {
-                        FileInfo oFileInfo = new FileInfo(line);
-                        dtCreationTime = oFileInfo.CreationTime;
-                        nm = line.Replace(@"C:\Users\", "");
-                        user = nm.Substring(0, nm.IndexOf(@"\AppData"));
-
-                        FilesFound.Add(new FileDetail(oFileInfo.Directory.FullName,
-                                                  user,
-                                                  oFileInfo.Name,
-                                                  dtCreationTime.ToString(),
-                                                  oFileInfo.Length));
+                        name = ExtractData(line);
                         CountLogs += 1;
-
-                        // Add each unique user.
-                        if (!names.Contains(user))
-                            names.Add(user);
                     }
-
-                    // only if like a config file.
-                    if (line.ToLower().Contains(".exe.config"))
+                    else if (line.ToLower().Contains(".exe.config"))
                     {
-                        FileInfo oFileInfo = new FileInfo(line);
-                        dtCreationTime = oFileInfo.CreationTime;
-                        nm = line.Replace(@"C:\Users\", "");
-                        user = nm.Substring(0, nm.IndexOf(@"\AppData"));
-
-                        FilesFound.Add(new FileDetail(oFileInfo.Directory.FullName,
-                                                  user,
-                                                  oFileInfo.Name,
-                                                  dtCreationTime.ToString(),
-                                                  oFileInfo.Length));
+                        name = ExtractData(line);
                         CountConfigs += 1;
-
-                        // Add each unique user.
-                        if (!names.Contains(user))
-                            names.Add(user);
                     }
+
+                    // Add each unique user.
+                    if ((name != string.Empty) && (!names.Contains(name)))
+                        names.Add(name);
                 }
-
                 CountUsers = names.Count;
-
+               
             }
         }
 
+        private string ExtractData(string line)
+        {
+            FileInfo oFileInfo = new FileInfo(line);
+            DateTime dtCreationTime = oFileInfo.CreationTime;
+            string nm = line.Replace(@"C:\Users\", "");
+            string user = nm.Substring(0, nm.IndexOf(@"\AppData"));
+
+            FilesFound.Add(new FileDetail(oFileInfo.Directory.FullName,
+                                      user,
+                                      oFileInfo.Name,
+                                      dtCreationTime.ToString(),
+                                      oFileInfo.Length));
+            return user;
+        }
 
 
     }

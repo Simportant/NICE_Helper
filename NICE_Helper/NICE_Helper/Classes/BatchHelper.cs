@@ -5,10 +5,9 @@ namespace NICE_Helper
 {
     public abstract class BatchHelper 
     {
-        public static string _outPath;
-        public static string _outFile;
-        public static string _batchFile;
-        public static string _batchCommand;
+        protected string _outPath;
+        protected string _outFile;
+        protected string _batchFile;
 
         public BatchHelper()
         {
@@ -20,7 +19,7 @@ namespace NICE_Helper
             _batchFile = _outPath + "temp.bat";
 
         }
-        public static int RunBatch(string BatchCommand)
+        protected int RunBatch(string BatchCommand)
         {
             
             int result = Helper.RESULT_GOOD;
@@ -43,16 +42,12 @@ namespace NICE_Helper
                     result = Helper.RESULT_BAD;
                 
             }
-            catch (Exception ex)
-            {
-                ErrorLogger.Log(ex.Message, System.Reflection.MethodBase.GetCurrentMethod().Name, Helper.LogLevel.ERROR, true);
-                result = Helper.RESULT_BAD;
-            }
+            catch (Exception) { throw; }
 
             return result;
         }
-        
-        private static void CreateBatch(string BatchCommand)
+
+        protected void CreateBatch(string BatchCommand)
         {
             try {
                 using (FileWriter btch = new FileWriter(_batchFile))
@@ -60,11 +55,7 @@ namespace NICE_Helper
                     btch.WriteLine(BatchCommand);
                 }
             }
-            catch (Exception ex)
-            {
-                ErrorLogger.Log(ex.Message, System.Reflection.MethodBase.GetCurrentMethod().Name, Helper.LogLevel.ERROR, true);
-                throw;
-            }
+            catch (Exception)  { throw; }
         }
 
     }

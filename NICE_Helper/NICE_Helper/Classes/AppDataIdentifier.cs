@@ -10,7 +10,7 @@ namespace NICE_Helper
     class AppDataIdentifier : BatchHelper
     {
 
-        public BindingList<FileDetail> FoldersFound { get; }
+        public BindingList<FileDetail> FoldersFound { get; private set; }
         public int FoldersCount { get { return (FoldersFound != null) ? FoldersFound.Count() : 0; } }
         public bool ReadyForDeletion { get { return FoldersFound.Where(x => (x.Selected == true)).ToList().Count > 0; } }
         public AppDataIdentifier()
@@ -30,6 +30,10 @@ namespace NICE_Helper
 
                 Helper.DeleteFile(_batchFile);
                 Helper.DeleteFile(_outFile);
+                
+                if (FoldersFound.Count > 1)
+                    FoldersFound.SortList();
+
             }
             catch (Exception) { throw; }
         }
@@ -39,7 +43,6 @@ namespace NICE_Helper
             FileDetail ap = new FileDetail();
             ap = FoldersFound.FirstOrDefault(x => x.User == userName);
             ap.Selected = !ap.Selected;
-
         }
 
         public void RemoveSelectedItems()
@@ -62,7 +65,6 @@ namespace NICE_Helper
                 string line;
                 string user;
                 string nm;
-
                 while ((line = sw.ReadLine()) != null)
                 {
                     // only if like a config file.
@@ -76,9 +78,6 @@ namespace NICE_Helper
                 }
             }
         }
-
-
-
 
     }
 }
